@@ -157,10 +157,13 @@ const idpConfig = await parseIdPMetadata('./idp.xml');
 const samlStrategy = new SamlStrategy({
   entryPoint: idpConfig.entryPoint,
   issuer: 'my_sp_samltestid_001', // Your SP entity ID
-  callbackUrl: 'http://localhost:3000/login/callback',
+  //callbackUrl: 'http://localhost:3000/login/callback',
+  path: "/login/callback",
+  host: process.env.APP_DOMAIN,
+  protocol: "http://",
   cert: idpConfig.cert,
   logoutUrl : idpConfig.logoutEndpoint,
-  logoutCallbackUrl: 'http://localhost:3000/logout/callback'
+  logoutCallbackUrl: `https://${process.env.APP_DOMAIN}/logout/callback`
 }, (profile, done) => {
   // Here, you can use the profile to authenticate the user in your system
   // To access the raw SAML response, you can use profile.getAssertionXml() or profile.getAssertion()
