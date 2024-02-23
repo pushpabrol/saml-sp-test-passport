@@ -370,6 +370,7 @@ passport.logoutSamlCallback = function(req, res){
 }
 
 app.post('/logout/callback', passport.logoutSamlCallback);
+app.get('/logout/callback', passport.logoutSamlCallback);
 
 
 app.get('/', (req, res) => {
