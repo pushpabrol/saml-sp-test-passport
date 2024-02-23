@@ -31,14 +31,13 @@ const formatCertificate = (certData) => {
   };
   
 // Function to parse IdP metadata and return configuration data
-function parseIdPMetadata(metadataPath) {
+function parseIdPMetadata(xml) {
   return new Promise((resolve, reject) => {
     //const parser = new xml2js.Parser();
     const parser = new xml2js.Parser({
         tagNameProcessors: [xml2js.processors.stripPrefix] // Strips namespace prefixes
     });
-    const xml = fs.readFileSync(metadataPath, 'utf8');
-
+  
     parser.parseString(xml, (err, result) => {
       if (err) {
         reject('Failed to parse IdP metadata');
@@ -150,8 +149,7 @@ passport.deserializeUser((user, done) => {
 });
 
 
-//const idpConfig = await parseIdPMetadata('./idp.xml');
-const idpConfig = `<?xml version="1.0" encoding="utf-8"?>
+const idpConfig = await parseIdPMetadata(`<?xml version="1.0" encoding="utf-8"?>
 <EntityDescriptor ID="_0c2e727b-fd8d-4cc2-afee-6fb481868e3e" entityID="https://sts.windows.net/ce4dd77a-0fd2-459b-a419-183305c58ae1/"
     xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -330,7 +328,8 @@ const idpConfig = `<?xml version="1.0" encoding="utf-8"?>
         <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://login.microsoftonline.com/ce4dd77a-0fd2-459b-a419-183305c58ae1/saml2" />
         <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://login.microsoftonline.com/ce4dd77a-0fd2-459b-a419-183305c58ae1/saml2" />
     </IDPSSODescriptor>
-</EntityDescriptor>`;
+</EntityDescriptor>`);
+;
 
 // Configure passport-saml strategy
 const samlStrategy = new SamlStrategy({
