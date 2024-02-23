@@ -507,6 +507,13 @@ app.post('/token-exchange', bodyParser.urlencoded({ extended: false }), async (r
    passport.logoutSaml(req,res);
   });
 
+  app.get('/logout', (req, res) => {
+    //req.logout();  // Passport.js logout method
+   // res.redirect('/');  // Redirect to the home page or login page
+
+   passport.logoutSaml(req,res);
+  });
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
